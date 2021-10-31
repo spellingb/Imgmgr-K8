@@ -1,0 +1,71 @@
+---
+# See full syntax at https://docs.onica.com/projects/runway
+deployments:
+  - modules:
+      - path: tfstate.cfn
+        environments:
+          dev: False
+          prod: False
+          common: True
+      - path: vpc.tf
+        environments:
+          dev: False
+          prod: False
+          common: True
+        parameters:
+          environment: common
+        options:
+          terraform_backend_config:
+            bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
+            dynamodb_table: ${cfn ${var namespace}-tf-state.TerraformStateTableName}
+      - path: imgmgr.tf
+        environments:
+          dev: True
+          prod: True
+          common: False
+        parameters:
+          keypair: ${env AWS_REGION}-EC2-Default-Key
+          statebucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
+          environment: ${env DEPLOY_ENVIRONMENT}
+          min: ${var min.${env DEPLOY_ENVIRONMENT}}
+          max: ${var max.${env DEPLOY_ENVIRONMENT}}
+          desired: ${var desired.${env DEPLOY_ENVIRONMENT}}
+          instance_type: ${var instance_type.${env DEPLOY_ENVIRONMENT}}
+        options:
+          terraform_backend_config:
+            bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
+            dynamodb_table: ${cfn ${var namespace}-tf-state.TerraformStateTableName}
+    regions: ${var regions.${env DEPLOY_ENVIRONMENT}}
+    parameters:
+      region: ${env AWS_REGION}
+      namespace: ${var namespace}
+      customer: ${var customer}
+    module_options:
+      terraform_version: 1.0.8
+
+variables:
+  namespace: top-lab15-capstone
+  customer: top-lab15
+  regions:
+    common:
+      - us-west-1
+    dev:
+      - us-west-1
+    prod:
+      - us-west-1
+  min:
+    common: "1"
+    dev: "1"
+    prod: "2"
+  max:
+    common: "1"
+    dev: "1"
+    prod: "2"
+  desired:
+    common: "1"
+    dev: "1"
+    prod: "2"
+  instance_type:
+    common: t2.micro
+    dev: t2.micro
+    prod: t2.small
