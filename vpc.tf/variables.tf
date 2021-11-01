@@ -24,7 +24,7 @@ variable "CiderBlock" {
 locals {
     priv = 100
     pub = 200
-    maxsubnets = 2
+    maxsubnets = 3
 }
 
 locals {
