@@ -9,11 +9,23 @@ deployments:
           common: True
       - path: vpc.tf
         environments:
-          dev: False
+          dev: True
           prod: False
-          common: True
+          common: False
         parameters:
-          environment: common
+          environment: ${env DEPLOY_ENVIRONMENT}
+          CiderBlock: ${var ciderblock.${env AWS_REGION}.${env DEPLOY_ENVIRONMENT}}
+        options:
+          terraform_backend_config:
+            bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
+            dynamodb_table: ${cfn ${var namespace}-tf-state.TerraformStateTableName}
+      - path: k8cluster.tf
+        tags:
+          - kube
+        environments:
+          dev: True
+          prod: False
+          common: False
         options:
           terraform_backend_config:
             bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
@@ -22,6 +34,7 @@ deployments:
     parameters:
       region: ${env AWS_REGION}
       namespace: ${var namespace}
+      environment: ${env DEPLOY_ENVIRONMENT}
     module_options:
       terraform_version: 1.0.8
 
@@ -34,3 +47,21 @@ variables:
       - us-west-1
     prod:
       - us-west-1
+  ciderblock:
+    us-east-1:
+      common: "10.100"
+      dev: "10.101"
+      prod: "10.102"
+    us-east-2:
+      common: "10.110"
+      dev: "10.111"
+      prod: "10.112"
+    us-west-1:
+      common: "10.120"
+      dev: "10.121"
+      prod: "10.122"
+    us-west-2:
+      common: "10.130"
+      dev: "10.131"
+      prod: "10.132"
+      

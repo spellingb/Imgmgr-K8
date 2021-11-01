@@ -1,5 +1,5 @@
 output "Ciderblock" {
-  value = "${lookup(var.CiderBlock, var.region)}.0.0/16"
+  value = "${var.CiderBlock}.0.0/16"
 }
 output "pub_networks" {
   value = local.pub_networks
