@@ -26,6 +26,8 @@ deployments:
           dev: True
           prod: False
           common: False
+        parameters:
+          instance_type: ${var instance_type}
         options:
           terraform_backend_config:
             bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
@@ -64,4 +66,5 @@ variables:
       common: "10.130"
       dev: "10.131"
       prod: "10.132"
+  instance_type: t3.small
       
