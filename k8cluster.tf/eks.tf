@@ -30,9 +30,23 @@ module "eks" {
       worker_additional_security_group_ids = [aws_security_group.node.id]
     }
   }
+  map_roles = [
+      {
+      rolearn  = local.role
+      username = local.rolename
+      groups   = ["system:masters"]
+    }
+  ]
+  map_users = [
+    {
+      userarn  = data.aws_caller_identity.current.arn
+      username = local.username
+      groups   = ["system:masters"]
+    }
+  ]
 
   write_kubeconfig       = true
-  #kubeconfig_name        = "${var.namespace}-${var.environment}"
-  kubeconfig_output_path = "../"
+  kubeconfig_name        = "config"
+  kubeconfig_output_path = "../.kube/${var.environment}/"
 }
 

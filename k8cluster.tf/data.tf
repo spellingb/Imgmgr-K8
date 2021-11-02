@@ -56,3 +56,10 @@ data "aws_eks_cluster" "cluster" {
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks.cluster_id
 }
+
+data "aws_caller_identity" "current" {}
+locals {
+  username = split(":", data.aws_caller_identity.current.user_id)[1]
+  role = trimsuffix(data.aws_caller_identity.current.arn, "/${local.username}")
+  rolename = split("/", local.role)[1]
+}
