@@ -26,3 +26,8 @@ variable "min_capacity" {
 locals {
   cluster_name = "${var.namespace}-${var.environment}"
 }
+locals {
+  username = split(":", data.aws_caller_identity.current.user_id)[1]
+  role = trimsuffix(data.aws_caller_identity.current.arn, "/${local.username}")
+  rolename = split("/", local.role)[1]
+}
