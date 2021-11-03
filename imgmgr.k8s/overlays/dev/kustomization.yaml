@@ -1,8 +1,8 @@
 bases:
   - ../../base
 commonLabels:
-  org: myorg
+  org: Decouplify
   variant: dev
 namePrefix: dev-
 patchesStrategicMerge:
-  - map.yaml
+  - bucketmap.yaml

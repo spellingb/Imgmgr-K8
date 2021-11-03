@@ -8,6 +8,8 @@ deployments:
           prod: False
           common: True
       - path: vpc.tf
+        tags:
+          - vpc
         environments:
           dev: True
           prod: True

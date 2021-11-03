@@ -1,6 +1,0 @@
-apiVersion: v1
-data:
-  bucketName: top-lab15-capstone-prod-imgmgr-20211103044810324000000002
-kind: ConfigMap
-metadata:
-  name: bucket

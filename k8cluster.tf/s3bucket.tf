@@ -8,3 +8,15 @@ resource "aws_s3_bucket" "img_mgr_bucket" {
     Environment = var.environment
   }
 }
+
+resource "local_file" "bucketmap" {
+    content  = <<-EOT
+apiVersion: v1
+data:
+  bucketName: ${aws_s3_bucket.img_mgr_bucket.bucket}
+kind: ConfigMap
+metadata:
+  name: bucket
+EOT
+    filename = "../imgmgr.k8s/overlays/${var.environment}/bucketmap.yaml"
+}

@@ -1,8 +1,8 @@
 bases:
   - ../../base
 commonLabels:
-  org: myorg
+  org: Decouplify
   variant: prod
 namePrefix: prod-
 patchesStrategicMerge:
-  - map.yaml
+  - bucketmap.yaml
