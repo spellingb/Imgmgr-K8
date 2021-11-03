@@ -29,7 +29,7 @@ spec:
           protocol: TCP
         resources:
           requests:
-            memory: "200Mi"
+            memory: "50Mi"
           limits:
-            memory: "300Mi"
-            cpu: "500m"
+            memory: "100Mi"
+            cpu: "100m"

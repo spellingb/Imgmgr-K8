@@ -50,11 +50,14 @@ deployments:
       kubectl_version: 1.21.4
   - modules:
     - path: demo-backend-crystal.k8
-      tags: demoapp
-    - path: demo-backend-crystal.k8
-      tags: demoapp
+      tags: 
+        - demoapp
+    - path: demo-backend-nodejs.k8
+      tags: 
+        - demoapp
     - path: demo-frontend
-      tags: demoapp
+      tags: 
+        - demoapp
     env_vars:
       KUBECONFIG:
         - .kube
@@ -62,6 +65,7 @@ deployments:
         - kubeconfig_${var namespace}-${env DEPLOY_ENVIRONMENT}
     module_options:
       kubectl_version: 1.21.4
+    regions: ${var regions.${env DEPLOY_ENVIRONMENT}}
 variables:
   namespace: top-lab15-capstone
   regions:

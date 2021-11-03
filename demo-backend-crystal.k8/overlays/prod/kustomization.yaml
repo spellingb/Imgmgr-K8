@@ -4,3 +4,5 @@ commonLabels:
   org: demo
   variant: prod
 namePrefix: prod-
+patchesStrategicMerge:
+  - deployment.yaml
