@@ -48,7 +48,20 @@ deployments:
     module_options:
       terraform_version: 1.0.8
       kubectl_version: 1.21.4
-
+  - modules:
+    - path: demo-backend-crystal.k8
+      tags: demoapp
+    - path: demo-backend-crystal.k8
+      tags: demoapp
+    - path: demo-frontend
+      tags: demoapp
+    env_vars:
+      KUBECONFIG:
+        - .kube
+        - ${env DEPLOY_ENVIRONMENT}
+        - kubeconfig_${var namespace}-${env DEPLOY_ENVIRONMENT}
+    module_options:
+      kubectl_version: 1.21.4
 variables:
   namespace: top-lab15-capstone
   regions:

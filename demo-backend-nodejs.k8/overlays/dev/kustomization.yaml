@@ -1,0 +1,6 @@
+bases:
+  - ../../base
+commonLabels:
+  org: demo
+  variant: dev
+namePrefix: dev-
