@@ -10,7 +10,7 @@ deployments:
       - path: vpc.tf
         environments:
           dev: True
-          prod: False
+          prod: True
           common: False
         parameters:
           environment: ${env DEPLOY_ENVIRONMENT}
@@ -24,7 +24,7 @@ deployments:
           - kube
         environments:
           dev: True
-          prod: False
+          prod: True
           common: False
         parameters:
           instance_type: ${var instance_type}
@@ -44,6 +44,7 @@ deployments:
       environment: ${env DEPLOY_ENVIRONMENT}
     module_options:
       terraform_version: 1.0.8
+      kubectl_version: 1.21.4
 
 variables:
   namespace: top-lab15-capstone
