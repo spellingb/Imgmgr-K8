@@ -1,0 +1,8 @@
+bases:
+  - ../../base
+commonLabels:
+  org: myorg
+  variant: dev
+namePrefix: dev-
+patchesStrategicMerge:
+  - map.yaml

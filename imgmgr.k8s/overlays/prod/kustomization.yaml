@@ -1,0 +1,8 @@
+bases:
+  - ../../base
+commonLabels:
+  org: myorg
+  variant: prod
+namePrefix: prod-
+patchesStrategicMerge:
+  - map.yaml

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: imgmgr
+  labels:
+    app: imgmgr-capstone
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: imgmgr-capstone
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: imgmgr-capstone
+    spec:
+      containers:
+      - name: flask-imgmgr
+        image: brandonspell08/flask-imgmgr:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+        resources:
+          requests:
+            memory: "200Mi"
+          limits:
+            memory: "500Mi"
+            cpu: "900m"
+        env:
+        - name: BUCKET_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: bucket
+              key: bucketName
