@@ -32,6 +32,11 @@ deployments:
           terraform_backend_config:
             bucket: ${cfn ${var namespace}-tf-state.TerraformStateBucketName}
             dynamodb_table: ${cfn ${var namespace}-tf-state.TerraformStateTableName}
+      - path: imgmgr.k8s
+        tags:
+          - imgmgr
+    env_vars:
+      IMGMGR_BUCKET: top-lab15-capstone-dev-imgmgr-20211102210833128400000001
     regions: ${var regions.${env DEPLOY_ENVIRONMENT}}
     parameters:
       region: ${env AWS_REGION}

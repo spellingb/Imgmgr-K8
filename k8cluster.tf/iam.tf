@@ -12,6 +12,34 @@ resource "aws_iam_role" "node" {
   name_prefix = "eks-node-"
 
   assume_role_policy = data.aws_iam_policy_document.node-assume-role-policy.json
+
+  inline_policy {
+    name = "img_mgr_bucketpolicy"
+    policy = jsonencode({
+      Version = "2012-10-17"
+      Statement = [
+        {
+          Action = [
+            "s3:GetObject",
+            "s3:PutObject",
+            "s3:DeleteObject"
+          ]
+          Effect   = "Allow"
+          Resource = "${aws_s3_bucket.img_mgr_bucket.arn}/*"
+        },
+        {
+          Action   = ["s3:ListBucket"]
+          Effect   = "Allow"
+          Resource = aws_s3_bucket.img_mgr_bucket.arn
+        },
+        {
+          Action   = ["ec2:DescribeTags"]
+          Effect   = "Allow"
+          Resource = "*"
+        }
+      ]
+    })
+  }
 }
 resource "aws_iam_role_policy_attachment" "node-AmazonEKSWorkerNodePolicy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"

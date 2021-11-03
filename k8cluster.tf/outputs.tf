@@ -1,13 +1,11 @@
-output "private_subnet_ids" {
-  value = data.aws_subnet_ids.private_sub_id.ids
-}
-output "public_subnet_ids" {
-  value = data.aws_subnet_ids.public_sub_id.ids
-}
 output "node_policy" {
   value = aws_iam_role.node
 }
-/* output "cluster_id" {
+output "imgmgr_bucket" {
+  value = aws_s3_bucket.img_mgr_bucket.bucket
+}
+
+output "cluster_id" {
   description = "EKS cluster ID."
   value       = module.eks.cluster_id
 }
@@ -32,12 +30,7 @@ output "config_map_aws_auth" {
   value       = module.eks.config_map_aws_auth
 }
 
-output "region" {
-  description = "AWS region"
-  value       = data.aws_region.current.id
-}
-
 output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = local.cluster_name
-} */
+}

@@ -40,3 +40,4 @@ terraform.rc
 
 *.old
 *kubeconfig*
+sampleK8App.tf/*

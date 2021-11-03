@@ -7,7 +7,7 @@ if ((Get-Command -Name 'git' -CommandType Application -ErrorAction SilentlyConti
         if ( $gitBranch -match 'Master' ) {
             $subfolder = 'common'
         } else {
-            $subfolder = $gitBranch
+            $subfolder = $gitBranch.TrimStart('ENV-')
         }
     }
 }

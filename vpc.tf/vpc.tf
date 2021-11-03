@@ -16,13 +16,13 @@ module "vpc" {
   public_subnet_tags  = {
     Name                                              = "${var.namespace}-Public"
     Environment                                       = var.environment
-    "kubernetes.io/cluster/${var.namespace}-${var.environment}-K8Cluster"  = "shared"
+    "kubernetes.io/cluster/${var.namespace}-${var.environment}"  = "shared"
     "kubernetes.io/role/elb"                          = "1"  
   }
   private_subnet_tags = {
       Name = "${var.namespace}-Private"
       Environment = var.environment
-      "kubernetes.io/cluster/${var.namespace}-${var.environment}-K8Cluster"  = "shared"
+      "kubernetes.io/cluster/${var.namespace}-${var.environment}"  = "shared"
       "kubernetes.io/role/internal-elb"                 = "1"
     }
   tags  = {
