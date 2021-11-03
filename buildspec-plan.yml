@@ -1,0 +1,23 @@
+--- 
+phases:
+
+  pre_build: 
+    commands: 
+      - "echo Using AWS Account: $AWS_ACCESS_KEY_ID"
+      - "aws sts get-caller-identity"
+      - "echo Linting Project..."
+      - "echo Environment variables:"
+      - "printenv"
+  build: 
+    commands: 
+      - "echo Build started on `date`"
+      - "echo Running plan on VPC terraform deployment stack..."
+      - "runway plan --tag vpc --ci"
+      - "echo running plan on K8 Cluster terraform deployment stack"
+      - "runway plan --tag kube --ci"
+      - "echo Running plan on imgmgr k8 deployment stack"
+      - "runway plan --tag imgmgr --ci"
+  post_build: 
+    commands: 
+      - "echo Build completed on `date`"
+version: 0.2
