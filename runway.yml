@@ -36,7 +36,10 @@ deployments:
         tags:
           - imgmgr
     env_vars:
-      IMGMGR_BUCKET: top-lab15-capstone-dev-imgmgr-20211102210833128400000001
+      KUBECONFIG:
+        - .kube
+        - ${env DEPLOY_ENVIRONMENT}
+        - kubeconfig_${var namespace}-${env DEPLOY_ENVIRONMENT}
     regions: ${var regions.${env DEPLOY_ENVIRONMENT}}
     parameters:
       region: ${env AWS_REGION}
