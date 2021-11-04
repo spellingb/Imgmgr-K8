@@ -17,6 +17,9 @@ phases:
       - mv terraform /usr/bin/terraform
       - rm -f terraform.zip
       - terraform -version
+      - echo "Installing Runway"
+      - curl -L https://oni.ca/runway/latest/linux -o runway
+      - mv runway /usr/bin/runway
       - export CI=true
       - export CODEBUILD=true
       - export CODEBUILD_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
