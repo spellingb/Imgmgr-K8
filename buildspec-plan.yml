@@ -66,7 +66,7 @@ phases:
     commands: 
       - "echo Build started on `date`"
       - "echo Running plan on VPC terraform deployment stack..."
-      # - "runway plan --tag vpc --ci"
+      - "runway plan --tag vpc --ci"
       - "echo running plan on K8 Cluster terraform deployment stack"
       # - "runway plan --tag kube --ci"
       - "echo Running plan on imgmgr k8 deployment stack"
