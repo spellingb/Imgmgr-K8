@@ -28,7 +28,7 @@ phases:
       - export CODEBUILD_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new
       - export IMAGE_TAG=$CODEBUILD_GIT_SHORT_COMMIT
       - export ACCOUNT=$CODEBUILD_ACCOUNT_ID
-      - export DEPLOY_ENVIRONMENT=${CODEBUILD_GIT_BRANCH:4}"
+      - export DEPLOY_ENVIRONMENT=$(echo $CODEBUILD_GIT_BRANCH | sed -r 's/^.{4}//')
       - echo "==> AWS CodeBuild Extra Environment Variables:"
       - echo "==> CI = $CI"
       - echo "==> CODEBUILD = $CODEBUILD"
