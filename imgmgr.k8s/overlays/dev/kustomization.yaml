@@ -6,3 +6,4 @@ commonLabels:
 namePrefix: dev-
 patchesStrategicMerge:
   - bucketmap.yaml
+  - deployment.yaml
