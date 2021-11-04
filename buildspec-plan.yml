@@ -5,6 +5,12 @@ phases:
     commands: 
       - "echo Using AWS Account: $AWS_ACCESS_KEY_ID"
       - "aws sts get-caller-identity"
+      - export CODEBUILD_GIT_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - if [ "$CODEBUILD_GIT_BRANCH" = "" ] ; then
+          CODEBUILD_GIT_BRANCH="$(git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }')";
+          export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/};
+        fi
+      - export DEPLOY_ENVIRONMENT="${CODEBUILD_GIT_BRANCH:4}"
       - "echo Linting Project..."
       - "echo Environment variables:"
       - "printenv"
