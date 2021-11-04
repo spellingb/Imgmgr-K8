@@ -1,0 +1,96 @@
+version: 0.2
+env:
+  variables:
+     TERRAFORM_VERSION: "1.0.8"
+phases:
+  install:
+    commands:
+      - echo "Installing SSM"
+      - curl -o "amazon-ssm-agent.deb" https://s3."$AWS_REGION".amazonaws.com/amazon-ssm-"$AWS_REGION"/latest/debian_amd64/amazon-ssm-agent.deb
+      - dpkg -i amazon-ssm-agent.deb
+      - mkdir /etc/amazon/ssm -p
+      - touch /etc/amazon/ssm/amazon-ssm-agent.json
+      - curl -o /etc/amazon/ssm/amazon-ssm-agent.json https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/ubuntu/standard/4.0/amazon-ssm-agent.json
+      - echo "Installing Terraform:"
+      - curl -o "terraform.zip" https://releases.hashicorp.com/terraform/"$TERRAFORM_VERSION"/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
+      - unzip terraform.zip
+      - mv terraform /usr/bin/terraform
+      - rm -f terraform.zip
+      - terraform -version
+      - echo "Installing Runway"
+      - curl -L https://oni.ca/runway/latest/linux -o runway
+      - mv runway /usr/local/bin/runway
+      - chmod 755 /usr/local/bin/runway
+      - runway --version
+      - export CI=true
+      - export CODEBUILD=true
+      - export CODEBUILD_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+      - export CODEBUILD_GIT_BRANCH="$(git symbolic-ref HEAD --short 2>/dev/null)"
+      - if [ "$CODEBUILD_GIT_BRANCH" = "" ] ; then
+          CODEBUILD_GIT_BRANCH="$(git branch -a --contains HEAD | sed -n 2p | awk '{ printf $1 }')";
+          export CODEBUILD_GIT_BRANCH=${CODEBUILD_GIT_BRANCH#remotes/origin/};
+        fi
+      - export CODEBUILD_GIT_CLEAN_BRANCH="$(echo $CODEBUILD_GIT_BRANCH | tr '/' '.')"
+      - export CODEBUILD_GIT_ESCAPED_BRANCH="$(echo $CODEBUILD_GIT_CLEAN_BRANCH | sed -e 's/[]\/$*.^[]/\\\\&/g')"
+      - export CODEBUILD_GIT_MESSAGE="$(git log -1 --pretty=%B)"
+      - export CODEBUILD_GIT_AUTHOR="$(git log -1 --pretty=%an)"
+      - export CODEBUILD_GIT_AUTHOR_EMAIL="$(git log -1 --pretty=%ae)"
+      - export CODEBUILD_GIT_COMMIT="$(git log -1 --pretty=%H)"
+      - export CODEBUILD_GIT_SHORT_COMMIT=$(echo $CODEBUILD_SOURCE_VERSION | cut -c 1-7)
+      - export CODEBUILD_GIT_TAG="$(git describe --tags --exact-match 2>/dev/null)"
+      - export CODEBUILD_GIT_MOST_RECENT_TAG="$(git describe --tags --abbrev=0)"
+      - export CODEBUILD_PULL_REQUEST=false
+      - if [ "${CODEBUILD_GIT_BRANCH#pr-}" != "$CODEBUILD_GIT_BRANCH" ] ; then
+          export CODEBUILD_PULL_REQUEST=${CODEBUILD_GIT_BRANCH#pr-};
+        fi
+      - export CODEBUILD_PROJECT=${CODEBUILD_BUILD_ID%:$CODEBUILD_LOG_PATH}
+      - export CODEBUILD_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new
+      - export IMAGE_TAG=$CODEBUILD_GIT_SHORT_COMMIT
+      - export ACCOUNT=$CODEBUILD_ACCOUNT_ID
+      - echo "==> AWS CodeBuild Extra Environment Variables:"
+      - echo "==> CI = $CI"
+      - echo "==> CODEBUILD = $CODEBUILD"
+      - echo "==> CODEBUILD_ACCOUNT_ID = $CODEBUILD_ACCOUNT_ID"
+      - echo "==> CODEBUILD_GIT_AUTHOR = $CODEBUILD_GIT_AUTHOR"
+      - echo "==> CODEBUILD_GIT_AUTHOR_EMAIL = $CODEBUILD_GIT_AUTHOR_EMAIL"
+      - echo "==> CODEBUILD_GIT_BRANCH = $CODEBUILD_GIT_BRANCH"
+      - echo "==> CODEBUILD_GIT_CLEAN_BRANCH = $CODEBUILD_GIT_CLEAN_BRANCH"
+      - echo "==> CODEBUILD_GIT_ESCAPED_BRANCH = $CODEBUILD_GIT_ESCAPED_BRANCH"
+      - echo "==> CODEBUILD_GIT_COMMIT = $CODEBUILD_GIT_COMMIT"
+      - echo "==> CODEBUILD_GIT_SHORT_COMMIT = $CODEBUILD_GIT_SHORT_COMMIT"
+      - echo "==> CODEBUILD_GIT_MESSAGE = $CODEBUILD_GIT_MESSAGE"
+      - echo "==> CODEBUILD_GIT_TAG = $CODEBUILD_GIT_TAG"
+      - echo "==> CODEBUILD_GIT_MOST_RECENT_TAG = $CODEBUILD_GIT_MOST_RECENT_TAG"
+      - echo "==> CODEBUILD_PROJECT = $CODEBUILD_PROJECT"
+      - echo "==> CODEBUILD_PULL_REQUEST = $CODEBUILD_PULL_REQUEST"
+      - echo "==> DEPLOY_ENVIRONMENT = $DEPLOY_ENVIRONMENT"
+      - if [ "$CODEBUILD_GIT_CLEAN_BRANCH" = "master" ] ; then
+          export DEPLOY_ENVIRONMENT='common';
+        else
+          export DEPLOY_ENVIRONMENT=$(echo $CODEBUILD_GIT_BRANCH | sed -r 's/^.{4}//');
+        fi
+      - echo "==> DEPLOY_ENVIRONMENT = $DEPLOY_ENVIRONMENT"
+      - echo '***** This is the current env:'
+      - printenv
+      - ls -lah
+      - pwd
+
+  pre_build: 
+    commands: 
+      - "echo Using AWS Account: $AWS_ACCESS_KEY_ID"
+      - "aws sts get-caller-identity"
+      - "echo Linting Project..."
+      
+  build: 
+    commands: 
+      - "echo Build started on `date`"
+      - "echo Running deploy on VPC terraform deployment stack..."
+      # - "runway deploy --tag vpc --ci --debug"
+      - codebuild-breakpoint
+      - "echo running deploy on K8 Cluster terraform deployment stack"
+      # - "runway deploy --tag kube --ci"
+      - "echo Running deploy on imgmgr k8 deployment stack"
+      # - "runway deploy --tag imgmgr --ci"
+  post_build: 
+    commands: 
+      - "echo Build completed on `date`"
