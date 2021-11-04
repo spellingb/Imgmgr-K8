@@ -48,7 +48,7 @@ deployments:
       namespace: ${var namespace}
       environment: ${env DEPLOY_ENVIRONMENT}
     module_options:
-      terraform_version: 1.0.8
+      # terraform_version: 1.0.8
       kubectl_version: 1.21.4
   - modules:
     - path: demo-backend-crystal.k8
