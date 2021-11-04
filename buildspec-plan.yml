@@ -2,15 +2,16 @@ version: 0.2
 env:
   variables:
      TERRAFORM_VERSION: "1.0.8"
+     KUBECTL_VERSION: "1.21.4"
 phases:
   install:
     commands:
-      - echo "Installing SSM"
-      - curl -o "amazon-ssm-agent.deb" https://s3."$AWS_REGION".amazonaws.com/amazon-ssm-"$AWS_REGION"/latest/debian_amd64/amazon-ssm-agent.deb
-      - dpkg -i amazon-ssm-agent.deb
-      - mkdir /etc/amazon/ssm -p
-      - touch /etc/amazon/ssm/amazon-ssm-agent.json
-      - curl -o /etc/amazon/ssm/amazon-ssm-agent.json https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/ubuntu/standard/4.0/amazon-ssm-agent.json
+      # - echo "Installing SSM"
+      # - curl -o "amazon-ssm-agent.deb" https://s3."$AWS_REGION".amazonaws.com/amazon-ssm-"$AWS_REGION"/latest/debian_amd64/amazon-ssm-agent.deb
+      # - dpkg -i amazon-ssm-agent.deb
+      # - mkdir /etc/amazon/ssm -p
+      # - touch /etc/amazon/ssm/amazon-ssm-agent.json
+      # - curl -o /etc/amazon/ssm/amazon-ssm-agent.json https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/ubuntu/standard/4.0/amazon-ssm-agent.json
       - echo "Installing Terraform:"
       - curl -o "terraform.zip" https://releases.hashicorp.com/terraform/"$TERRAFORM_VERSION"/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
       - unzip terraform.zip
@@ -22,6 +23,13 @@ phases:
       - mv runway /usr/local/bin/runway
       - chmod 755 /usr/local/bin/runway
       - runway --version
+      - echo "Installing Kubectl"
+      - curl -LO https://dl.k8s.io/release/v"$KUBECTL_VERSION"/bin/linux/amd64/kubectl
+      - curl -LO https://dl.k8s.io/v"$KUBECTL_VERSION"/bin/linux/amd64/kubectl.sha256
+      - echo "$(<kubectl.sha256) kubectl" | sha256sum --check
+      - mv kubectl /usr/local/bin/kubectl
+      - chmod 755 /usr/local/bin/kubectl
+      - kubectl version --client
       - export CI=true
       - export CODEBUILD=true
       - export CODEBUILD_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
