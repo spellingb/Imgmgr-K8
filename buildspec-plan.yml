@@ -1,8 +1,16 @@
 version: 0.2
-
+env:
+  variables:
+     TERRAFORM_VERSION: "0.14.7"
 phases:
   install:
     commands:
+      - echo "Installing Terraform:"
+      - curl -o "terraform.zip" https://releases.hashicorp.com/terraform/"$TERRAFORM_VERSION"/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
+      - unzip terraform.zip
+      - mv terraform /usr/bin/terraform
+      - rm -f terraform.zip
+      - terraform -version
       - export CI=true
       - export CODEBUILD=true
       - export CODEBUILD_ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
