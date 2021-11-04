@@ -5,6 +5,12 @@ env:
 phases:
   install:
     commands:
+      - echo "Installing SSM"
+      - curl -o "amazon-ssm-agent.deb" https://s3."$AWS_REGION".amazonaws.com/amazon-ssm-"$AWS_REGION"/latest/debian_amd64/amazon-ssm-agent.deb
+      - dpkg -i amazon-ssm-agent.deb
+      - mkdir /etc/amazon/ssm -p
+      - touch /etc/amazon/ssm/amazon-ssm-agent.json
+      - curl -o /etc/amazon/ssm/amazon-ssm-agent.json https://raw.githubusercontent.com/aws/aws-codebuild-docker-images/master/ubuntu/standard/4.0/amazon-ssm-agent.json
       - echo "Installing Terraform:"
       - curl -o "terraform.zip" https://releases.hashicorp.com/terraform/"$TERRAFORM_VERSION"/terraform_"$TERRAFORM_VERSION"_linux_amd64.zip
       - unzip terraform.zip
@@ -75,6 +81,7 @@ phases:
       - "echo Build started on `date`"
       - "echo Running plan on VPC terraform deployment stack..."
       - "runway plan --tag vpc --ci --debug"
+      - codebuild-breakpoint
       - "echo running plan on K8 Cluster terraform deployment stack"
       # - "runway plan --tag kube --ci"
       - "echo Running plan on imgmgr k8 deployment stack"
