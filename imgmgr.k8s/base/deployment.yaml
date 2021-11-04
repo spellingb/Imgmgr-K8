@@ -28,10 +28,10 @@ spec:
           protocol: TCP
         resources:
           requests:
-            memory: "200Mi"
+            memory: "100Mi"
           limits:
-            memory: "500Mi"
-            cpu: "900m"
+            memory: "200Mi"
+            cpu: "200m"
         env:
         - name: BUCKET_NAME
           valueFrom:
