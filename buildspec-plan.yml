@@ -90,7 +90,7 @@ phases:
       - "echo running plan on K8 Cluster terraform deployment stack"
       - "runway plan --tag kube --ci"
       - "echo Running plan on imgmgr k8 deployment stack"
-      # - "runway plan --tag imgmgr --ci"
+      - "runway plan --tag imgmgr --ci"
   post_build: 
     commands: 
       - "echo Build completed on `date`"
