@@ -47,7 +47,7 @@ deployments:
       region: ${env AWS_REGION}
       namespace: ${var namespace}
       environment: ${env DEPLOY_ENVIRONMENT}
-    module_options:
+    # module_options:
       # terraform_version: 1.0.8
       # kubectl_version: 1.21.4
   - modules:
