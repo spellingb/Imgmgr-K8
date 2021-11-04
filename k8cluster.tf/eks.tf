@@ -32,8 +32,8 @@ module "eks" {
   }
   map_roles = [
       {
-      rolearn  = local.role
-      username = local.rolename
+      rolearn  = "arn:aws:sts::757506681371:assumed-role/Rackspace"
+      username = "Rackspace"
       groups   = ["system:masters"]
     }
   ]
