@@ -85,7 +85,7 @@ phases:
     commands: 
       - "echo Build started on `date`"
       - "echo Running deploy on VPC terraform deployment stack..."
-      # - "runway deploy --tag vpc --ci --debug"
+      - "runway deploy --tag vpc --ci --debug"
       - codebuild-breakpoint
       - "echo running deploy on K8 Cluster terraform deployment stack"
       # - "runway deploy --tag kube --ci"
