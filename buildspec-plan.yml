@@ -88,7 +88,7 @@ phases:
       - "runway plan --tag vpc --ci --debug"
       - codebuild-breakpoint
       - "echo running plan on K8 Cluster terraform deployment stack"
-      # - "runway plan --tag kube --ci"
+      - "runway plan --tag kube --ci"
       - "echo Running plan on imgmgr k8 deployment stack"
       # - "runway plan --tag imgmgr --ci"
   post_build: 
