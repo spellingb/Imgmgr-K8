@@ -28,7 +28,6 @@ phases:
       - export CODEBUILD_BUILD_URL=https://$AWS_DEFAULT_REGION.console.aws.amazon.com/codebuild/home?region=$AWS_DEFAULT_REGION#/builds/$CODEBUILD_BUILD_ID/view/new
       - export IMAGE_TAG=$CODEBUILD_GIT_SHORT_COMMIT
       - export ACCOUNT=$CODEBUILD_ACCOUNT_ID
-      - export DEPLOY_ENVIRONMENT=$(echo $CODEBUILD_GIT_BRANCH | sed -r 's/^.{4}//')
       - echo "==> AWS CodeBuild Extra Environment Variables:"
       - echo "==> CI = $CI"
       - echo "==> CODEBUILD = $CODEBUILD"
@@ -46,11 +45,12 @@ phases:
       - echo "==> CODEBUILD_PROJECT = $CODEBUILD_PROJECT"
       - echo "==> CODEBUILD_PULL_REQUEST = $CODEBUILD_PULL_REQUEST"
       - echo "==> DEPLOY_ENVIRONMENT = $DEPLOY_ENVIRONMENT"
-      - if [ "$CODEBUILD_GIT_CLEAN_BRANCH" = "main" ] ; then
-          export DEPLOY_DIR='/';
+      - if [ "$CODEBUILD_GIT_CLEAN_BRANCH" = "master" ] ; then
+          export DEPLOY_ENVIRONMENT='common';
         else
-          export DEPLOY_DIR=${CODEBUILD_GIT_CLEAN_BRANCH};
+          export DEPLOY_ENVIRONMENT=$(echo $CODEBUILD_GIT_BRANCH | sed -r 's/^.{4}//');
         fi
+      - echo "==> DEPLOY_ENVIRONMENT = $DEPLOY_ENVIRONMENT"
       - echo '***** This is the current env:'
       - printenv
       - ls -lah
