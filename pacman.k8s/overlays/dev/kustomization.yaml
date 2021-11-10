@@ -1,0 +1,8 @@
+bases:
+  - ../../base
+commonLabels:
+  org: Decouplify
+  variant: dev
+namePrefix: dev-
+patchesStrategicMerge:
+  - deployment.yaml

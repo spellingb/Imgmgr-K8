@@ -1,6 +1,7 @@
 apiVersion: v1
 data:
   bucketName: top-lab15-capstone-dev-imgmgr-20211104175124349100000008
+  pacman.url: dev-pacman
 kind: ConfigMap
 metadata:
-  name: bucket
+  name: imgmgr-map

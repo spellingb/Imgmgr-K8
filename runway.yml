@@ -37,6 +37,9 @@ deployments:
       - path: imgmgr.k8s
         tags:
           - imgmgr
+      - path: pacman.k8s
+        tags:
+          - pacman
     env_vars:
       KUBECONFIG:
         - .kube

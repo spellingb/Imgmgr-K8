@@ -1,0 +1,8 @@
+bases:
+  - ../../base
+commonLabels:
+  org: Decouplify
+  variant: prod
+namePrefix: prod-
+patchesStrategicMerge:
+  - bucketmap.yaml

@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: flask-imgmgr
-        image: brandonspell08/flask-imgmgr:latest
+        image: brandonspell08/flask-imgmgr:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
@@ -36,5 +36,10 @@ spec:
         - name: BUCKET_NAME
           valueFrom:
             configMapKeyRef:
-              name: bucket
+              name: imgmgr-map
               key: bucketName
+        - name: PACMAN_URL
+          valueFrom:
+            configMapKeyRef:
+              name: imgmgr-map
+              key: pacman.url

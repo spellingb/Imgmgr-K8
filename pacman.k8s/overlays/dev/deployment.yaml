@@ -1,6 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: imgmgr
+  name: pacman
 spec:
   replicas: 1
