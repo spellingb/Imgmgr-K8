@@ -4,4 +4,4 @@ metadata:
   name: imgmgr-map
 data:
   bucketName: top-lab15-imgmgr-capstone-imgmgr-20211102210833128400000001
-  pacman.url: pacman
+  pacman.url: prod-pacman

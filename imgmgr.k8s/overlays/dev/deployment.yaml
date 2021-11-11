@@ -4,3 +4,11 @@ metadata:
   name: imgmgr
 spec:
   replicas: 1
+  template:
+    metadata:
+      labels:
+        app: imgmgr-capstone
+    spec:
+      containers:
+      - name: flask-imgmgr
+        image: brandonspell08/flask-imgmgr:1.3
