@@ -14,9 +14,10 @@ resource "local_file" "bucketmap" {
 apiVersion: v1
 data:
   bucketName: ${aws_s3_bucket.img_mgr_bucket.bucket}
+  pacman.url: ${var.environment}-pacman
 kind: ConfigMap
 metadata:
-  name: bucket
+  name: imgmgr-map
 EOT
   filename = "../imgmgr.k8s/overlays/${var.environment}/bucketmap.yaml"
 }
