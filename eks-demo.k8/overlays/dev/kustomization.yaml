@@ -2,7 +2,7 @@ bases:
   - ../../base
 commonLabels:
   org: demo
-  variant: prod
-namePrefix: prod-
+  variant: dev
+namePrefix: dev-
 patchesStrategicMerge:
   - deployment.yaml

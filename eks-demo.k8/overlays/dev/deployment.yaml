@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecsdemo-crystal
+spec:
+  replicas: 2
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecsdemo-frontend
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ecsdemo-frontend
+    spec:
+      containers:
+      - name: ecsdemo-frontend
+        env: 
+        - name: CRYSTAL_URL
+          value: "http://dev-ecsdemo-crystal.default.svc.cluster.local/crystal"
+        - name: NODEJS_URL
+          value: "http://dev-ecsdemo-nodejs.default.svc.cluster.local/"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecsdemo-nodejs
+spec:
+  replicas: 2

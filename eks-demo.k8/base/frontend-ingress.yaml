@@ -1,0 +1,12 @@
+# https://kubernetes.io/docs/reference/using-api/deprecation-guide/#ingress-v122
+# apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ecsdemo-frontend
+spec:
+  defaultBackend:
+    service:
+      name: ecsdemo-frontend
+      port:
+        number: 80
