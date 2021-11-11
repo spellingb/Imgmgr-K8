@@ -6,6 +6,7 @@ spec:
   selector:
     app: pacman
   ports:
-   -  protocol: TCP
+   -  name: pacport
+      protocol: TCP
       port: 8080
       targetPort: 8080
